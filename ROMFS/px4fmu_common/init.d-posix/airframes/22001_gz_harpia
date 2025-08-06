@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# @name TODO: Descrição
+#
+# @type Quadrotor
+#
+
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=[harpia]}
+
+. ${R}etc/init.d-posix/airframes/4001_gz_x500
