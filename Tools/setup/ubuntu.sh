@@ -61,8 +61,8 @@ UBUNTU_RELEASE="`lsb_release -rs`"
 echo "[ubuntu.sh] Ubuntu ${UBUNTU_RELEASE}"
 echo "[ubuntu.sh] Installing PX4 general dependencies"
 
-sudo apt-get update -y --quiet
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+apt-get update -y --quiet
+DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 	astyle \
 	build-essential \
 	ccache \
@@ -111,8 +111,8 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 
 	echo
 	echo "[ubuntu.sh] NuttX Installing Dependencies ($INSTALL_ARCH)"
-	sudo apt-get update -y --quiet
-	sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+	apt-get update -y --quiet
+	DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 		automake \
 		binutils-dev \
 		bison \
@@ -151,7 +151,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 		;
 
 	if [[ "${INSTALL_ARCH}" == "x86_64" ]]; then
-		sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+		DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 			g++-multilib \
 			gcc-arm-none-eabi \
 			gcc-multilib \
@@ -159,7 +159,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 	fi
 
 	if [[ "${INSTALL_ARCH}" == "aarch64" ]]; then
-		sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+		DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 			g++-aarch64-linux-gnu \
 			g++-arm-linux-gnueabihf \
 			;
@@ -167,7 +167,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 
 	if [ -n "$USER" ]; then
 		# add user to dialout group (serial port access)
-		sudo usermod -aG dialout $USER
+		usermod -aG dialout $USER
 	fi
 fi
 
@@ -178,16 +178,16 @@ if [[ $INSTALL_SIM == "true" ]]; then
 	echo "[ubuntu.sh] Installing PX4 simulation dependencies"
 
 	# General simulation dependencies
-	sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+	DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 		bc \
 		;
 
 	# Gazebo / Gazebo classic installation
 	if [[ "${UBUNTU_RELEASE}" == "18.04" || "${UBUNTU_RELEASE}" == "20.04" ]]; then
-		sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+		sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 		wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 		# Update list, since new gazebo-stable.list has been added
-		sudo apt-get update -y --quiet
+		apt-get update -y --quiet
 
 		# Install Gazebo classic
 		if [[ "${UBUNTU_RELEASE}" == "18.04" ]]; then
@@ -203,9 +203,9 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		echo "[ubuntu.sh] Gazebo (Harmonic) will be installed"
 		echo "[ubuntu.sh] Earlier versions will be removed"
 		# Add Gazebo binary repository
-		sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
+		wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
 		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-		sudo apt-get update -y --quiet
+		apt-get update -y --quiet
 
 		# Install Gazebo
 		gazebo_packages="gz-harmonic libunwind-dev"
@@ -215,7 +215,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		fi
 	fi
 
-	sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+	DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 		dmidecode \
 		$gazebo_packages \
 		gstreamer1.0-plugins-bad \
@@ -232,7 +232,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		protobuf-compiler \
 		;
 
-	if sudo dmidecode -t system | grep -q "Manufacturer: VMware, Inc." ; then
+	if dmidecode -t system | grep -q "Manufacturer: VMware, Inc." ; then
 		# fix VMWare 3D graphics acceleration for gazebo
 		echo "export SVGA_VGPU10=0" >> ~/.profile
 	fi
