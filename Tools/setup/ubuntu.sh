@@ -185,7 +185,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 	# Gazebo / Gazebo classic installation
 	if [[ "${UBUNTU_RELEASE}" == "18.04" || "${UBUNTU_RELEASE}" == "20.04" ]]; then
 		sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-		wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+		wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 		# Update list, since new gazebo-stable.list has been added
 		apt-get update -y --quiet
 
@@ -204,7 +204,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		echo "[ubuntu.sh] Earlier versions will be removed"
 		# Add Gazebo binary repository
 		wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
 		apt-get update -y --quiet
 
 		# Install Gazebo
